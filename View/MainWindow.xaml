@@ -9,7 +9,7 @@
         Icon="/icon/calculator.png"
         mc:Ignorable="d"
         Title="Калькулятор" MinHeight="515" MinWidth="335" Height="700" Width="455" WindowStartupLocation="CenterScreen">
-    
+    <!-- плохо!!! -->
     <Window.DataContext>
         <vm:CalculatorViewModel />
     </Window.DataContext>
@@ -33,7 +33,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="%">
+        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="%">
             <materialDesign:PackIcon Kind="Percent" />
         </Button>
 
@@ -49,13 +49,13 @@
 
 
 
-        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="1/x">1/x</Button>
+        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="1/x">1/x</Button>
 
-        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="x^2">
+        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="x^2">
             <materialDesign:PackIcon Kind="FormatSuperscript" />
         </Button>
 
-        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="sqrt">
+        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="sqrt">
             <materialDesign:PackIcon Kind="SquareRoot" />
         </Button>
 
@@ -118,7 +118,9 @@
          TextAlignment="Right"
          MaxLength="16"
          Style="{StaticResource Number}"/>-->
-
+        
+        
+        <!--Тут не должно быть ридонли, Текст - тоже не понятно-->
         <TextBox Grid.Row="1" HorizontalAlignment="Right" Text="{Binding CurrentInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  VerticalAlignment="Center" Width="auto" MinWidth="35" MinHeight="100" FontSize="30"
                  Grid.Column="0" Grid.ColumnSpan="4" TextAlignment="Right" MaxLength="16" 

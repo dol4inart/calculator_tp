@@ -11,6 +11,7 @@ namespace calculator
     /// <summary>
     /// Логика взаимодействия для App.xaml
     /// </summary>
+    //Здесь нужно подключить контекст
     public partial class App : Application
     {
     }

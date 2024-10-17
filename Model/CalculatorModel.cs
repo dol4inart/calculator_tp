@@ -1,4 +1,5 @@
-﻿using System;
+﻿using calculator.Model.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace calculator.Model
         public double CurrentValue { get; set; }
         public double PreviousValue { get; set; }
         public string Operation { get; set; }
+        public bool IsOperationPending { get; set; }
 
         public void ExecuteOperation()
         {
@@ -31,6 +33,13 @@ namespace calculator.Model
                     else
                         throw new DivideByZeroException("Cannot divide by zero");
                     break;
+            }
+        }
+
+        public void ExecuteFunction(string function)
+        {
+            switch (function)
+            {
                 case "sqrt":
                     CurrentValue = Math.Sqrt(CurrentValue);
                     break;
@@ -41,7 +50,11 @@ namespace calculator.Model
                     if (CurrentValue != 0)
                         CurrentValue = 1 / CurrentValue;
                     else
-                        throw new DivideByZeroException("Cannot divide by zero");
+                        throw new CurrentValueIsZeroException("Cannot divide by zero",CurrentValue);
+                    break;
+
+                case "%":
+                    CurrentValue = PreviousValue * (CurrentValue / 100);
                     break;
             }
         }
@@ -51,6 +64,7 @@ namespace calculator.Model
             CurrentValue = 0;
             PreviousValue = 0;
             Operation = string.Empty;
+            IsOperationPending = false;
         }
     }
 }

@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+//нет солида, нужно подключить базовый класс нотификатора (из лекции)
+
 namespace calculator.ViewModel
 {
     public class CalculatorViewModel : INotifyPropertyChanged
@@ -31,6 +33,7 @@ namespace calculator.ViewModel
 
         public ICommand NumberCommand { get; }
         public ICommand OperationCommand { get; }
+        public ICommand FunctionCommand { get; }
         public ICommand EqualsCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand ClearEntryCommand { get; }
@@ -44,6 +47,7 @@ namespace calculator.ViewModel
 
             NumberCommand = new RelayCommand(OnNumberButtonPressed);
             OperationCommand = new RelayCommand(OnOperationButtonPressed);
+            FunctionCommand = new RelayCommand(OnFunctionButtonPressed);
             EqualsCommand = new RelayCommand(OnEqualsButtonPressed);
             ClearCommand = new RelayCommand(OnClearButtonPressed);
             ClearEntryCommand = new RelayCommand(OnClearEntryButtonPressed);
@@ -64,7 +68,26 @@ namespace calculator.ViewModel
         {
             _calculatorModel.PreviousValue = double.Parse(CurrentInput);
             _calculatorModel.Operation = parameter.ToString();
+            _calculatorModel.IsOperationPending = true;
             CurrentInput = "0";
+        }
+
+        private void OnFunctionButtonPressed(object parameter)
+        {
+            var function = parameter.ToString();
+            if (_calculatorModel.IsOperationPending)
+            {
+                _calculatorModel.CurrentValue = double.Parse(CurrentInput);
+                _calculatorModel.ExecuteOperation();
+                CurrentInput = _calculatorModel.CurrentValue.ToString();
+                _calculatorModel.IsOperationPending = false;
+            }
+            else
+            {
+                _calculatorModel.CurrentValue = double.Parse(CurrentInput);
+                _calculatorModel.ExecuteFunction(function);
+                CurrentInput = _calculatorModel.CurrentValue.ToString();
+            }
         }
 
         private void OnEqualsButtonPressed(object parameter)
@@ -72,6 +95,7 @@ namespace calculator.ViewModel
             _calculatorModel.CurrentValue = double.Parse(CurrentInput);
             _calculatorModel.ExecuteOperation();
             CurrentInput = _calculatorModel.CurrentValue.ToString();
+            _calculatorModel.IsOperationPending = false;
         }
 
         private void OnClearButtonPressed(object parameter)
