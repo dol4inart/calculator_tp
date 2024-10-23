@@ -1,9 +1,11 @@
 ﻿using calculator.Model.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace calculator.Model
 {
@@ -28,10 +30,21 @@ namespace calculator.Model
                     CurrentValue = PreviousValue * CurrentValue;
                     break;
                 case "/":
-                    if (CurrentValue != 0)
-                        CurrentValue = PreviousValue / CurrentValue;
-                    else
-                        throw new DivideByZeroException("Cannot divide by zero");
+                    try 
+                    {
+                        if (CurrentValue != 0)
+                            CurrentValue = PreviousValue / CurrentValue;
+                        else
+                        {
+                            throw new CurrentValueIsZeroException("Cannot divide by zero", PreviousValue);
+                        }
+                    }
+                    catch (CurrentValueIsZeroException)
+                    {
+                        MessageBox.Show("Деление на ноль невозможно.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Clear();
+                    }
+
                     break;
             }
         }
@@ -41,16 +54,38 @@ namespace calculator.Model
             switch (function)
             {
                 case "sqrt":
-                    CurrentValue = Math.Sqrt(CurrentValue);
+                    try
+                    {
+                        if (CurrentValue < 0)
+                        {
+                            throw new NegativeSqrtException("NegativeSqrtException", CurrentValue);
+                        }
+                        CurrentValue = Math.Sqrt(CurrentValue);
+                    }
+                    catch (NegativeSqrtException)
+                    {
+                        MessageBox.Show("Взять квадратный корень из отрицательного числа нельзя.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Clear();
+                    }
+
                     break;
                 case "x^2":
                     CurrentValue = Math.Pow(CurrentValue, 2);
                     break;
                 case "1/x":
-                    if (CurrentValue != 0)
-                        CurrentValue = 1 / CurrentValue;
-                    else
-                        throw new CurrentValueIsZeroException("Cannot divide by zero",CurrentValue);
+                    try 
+                    {
+                        if (CurrentValue == 0)
+                            throw new CurrentValueIsZeroException("Cannot divide by zero", CurrentValue);
+                        else
+                            CurrentValue = 1 / CurrentValue;
+
+                    }
+                    catch (CurrentValueIsZeroException)
+                    {
+                        MessageBox.Show("Деление на ноль невозможно.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Clear();
+                    }
                     break;
 
                 case "%":
