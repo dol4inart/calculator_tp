@@ -20,6 +20,8 @@ namespace calculator.Model
                 Timestamp = DateTime.Now;
             }
 
+
+
             public override string ToString()
             {
                 return $"{Timestamp}: {Value} ({Operation})";

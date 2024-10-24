@@ -27,12 +27,30 @@ namespace calculator.View
             DataContext = new CalculatorViewModel();
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is CalculatorViewModel viewModel)
             {
-                viewModel.ProcessKeyPress(e.Key);
+                // Игнорируем нажатие Enter, если фокус не на TextBox
+                if (e.Key == Key.Enter && !IsFocusedOnTextBox())
+                {
+                    e.Handled = true; // Предотвращаем нажатие выделенной кнопки
+                    viewModel.ProcessKeyPress(e.Key);
+                }
+                else
+                {
+                    viewModel.ProcessKeyPress(e.Key);
+                }
             }
         }
+
+        private bool IsFocusedOnTextBox()
+        {
+            // Проверяем, находится ли фокус на TextBox
+            return Keyboard.FocusedElement is System.Windows.Controls.TextBox;
+        }
+
+
     }
 }

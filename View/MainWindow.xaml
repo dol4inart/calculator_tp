@@ -9,7 +9,7 @@
         Icon="/icon/calculator.png"
         mc:Ignorable="d"
         Title="Калькулятор" MinHeight="515" MinWidth="335" Height="700" Width="455" WindowStartupLocation="CenterScreen"
-        KeyDown="Window_KeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown">
 
     <Grid Background="#f3f3f3" Margin="4">
         <Grid.ColumnDefinitions>
@@ -47,11 +47,11 @@
             M+
         </Button>
 
-        <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding MemorySubstractCommand}">
+        <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding MemorySubtractCommand}">
             M-
         </Button>
 
-        <Button Grid.Row="2" Grid.Column="4" Style="{StaticResource ActionButton}" Command="{Binding ShowMemoryHistoryCommand}" Cursor="ArrowCD">
+        <Button Grid.Row="2" Grid.Column="4" Style="{StaticResource ActionButton}" Command="{Binding ShowMemoryHistoryCommand}" Click="Button_Click">
             M↓
         </Button>
 
@@ -118,7 +118,7 @@
         </Button>
         <Button Grid.Row="9" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="0">0</Button>
         <Button Grid.Row="9" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter=",">,</Button>
-        <Button Grid.Row="9" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding EqualsCommand}">
+        <Button Grid.Row="9" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding EqualsCommand}" Cursor="">
             <materialDesign:PackIcon Kind="Equal" />
         </Button>
         
@@ -144,7 +144,7 @@
         
         
         <!--Тут не должно быть ридонли, Текст - тоже не понятно-->
-        <TextBox Grid.Row="1" HorizontalAlignment="Right" Text="{Binding CurrentInput, Mode=TwoWay}" 
+        <TextBox x:Name="InputTextBox" Grid.Row="1" HorizontalAlignment="Right" Text="{Binding CurrentInput}" 
                  VerticalAlignment="Center" Width="auto" MinWidth="35" MinHeight="100" FontSize="30"
                  Grid.Column="0" Grid.ColumnSpan="4" TextAlignment="Right" MaxLength="16" 
                  Style="{StaticResource Number}" IsReadOnly="False"/>

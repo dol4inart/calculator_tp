@@ -1,8 +1,10 @@
 ﻿using calculator.Command;
 using calculator.Model;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace calculator.ViewModel
@@ -40,6 +42,9 @@ namespace calculator.ViewModel
         public ICommand MemorySubtractCommand { get; }
         public ICommand ShowMemoryHistoryCommand { get; }
 
+
+
+
         public double MemoryValue { get; private set; }
         public MemoryHistoryViewModel MemoryHistoryViewModel { get; }
 
@@ -72,7 +77,6 @@ namespace calculator.ViewModel
         private void OnMemoryClear(object parameter)
         {
             MemoryValue = 0;
-            MessageBox.Show("Memory cleared.");
         }
 
         private void OnMemoryRecall(object parameter)
@@ -84,21 +88,18 @@ namespace calculator.ViewModel
         {
             MemoryValue = double.Parse(CurrentInput);
             MemoryHistoryViewModel.AddMemoryItem(MemoryValue, "Saved");
-            MessageBox.Show($"Memory saved: {MemoryValue}");
         }
 
         private void OnMemoryAdd(object parameter)
         {
             MemoryValue += double.Parse(CurrentInput);
             MemoryHistoryViewModel.AddMemoryItem(MemoryValue, "Added");
-            MessageBox.Show($"Memory value: {MemoryValue}");
         }
 
         private void OnMemorySubtract(object parameter)
         {
             MemoryValue -= double.Parse(CurrentInput);
             MemoryHistoryViewModel.AddMemoryItem(MemoryValue, "Subtracted");
-            MessageBox.Show($"Memory value: {MemoryValue}");
         }
 
         private void OnShowMemoryHistory(object parameter)
@@ -252,10 +253,16 @@ namespace calculator.ViewModel
             }
         }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        internal void ProcessKeyPress(Key key, TextBox inputTextBox)
+        {
+            throw new NotImplementedException();
         }
     }
 }
