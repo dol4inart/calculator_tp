@@ -10,7 +10,11 @@
         mc:Ignorable="d"
         Title="Калькулятор" MinHeight="515" MinWidth="335" Height="700" Width="455" WindowStartupLocation="CenterScreen"
         PreviewKeyDown="Window_PreviewKeyDown">
-
+    <!--UniformGrid-->
+    <UniformGrid Background="#f3f3f3">
+        <UniformGrid.Columns>5</UniformGrid.Columns>
+        
+    </UniformGrid>
     <Grid Background="#f3f3f3" Margin="4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -51,7 +55,7 @@
             M-
         </Button>
 
-        <Button Grid.Row="2" Grid.Column="4" Style="{StaticResource ActionButton}" Command="{Binding ShowMemoryHistoryCommand}">
+        <Button Grid.Row="2" Grid.Column="4" Style="{StaticResource ActionButton}" Command="{Binding ShowMemoryHistoryCommand}" Cursor="Pen">
             M↓
         </Button>
 

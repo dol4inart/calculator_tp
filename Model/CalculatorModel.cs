@@ -30,20 +30,16 @@ namespace calculator.Model
                     CurrentValue = PreviousValue * CurrentValue;
                     break;
                 case "/":
-                    try 
-                    {
+                    /*try 
+                    {*/
                         if (CurrentValue != 0)
                             CurrentValue = PreviousValue / CurrentValue;
                         else
                         {
                             throw new CurrentValueIsZeroException("Cannot divide by zero", PreviousValue);
                         }
-                    }
-                    catch (CurrentValueIsZeroException)
-                    {
-                        MessageBox.Show("Деление на ноль невозможно.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Clear();
-                    }
+                    /*}*/
+                    
 
                     break;
             }
