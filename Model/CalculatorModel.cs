@@ -97,5 +97,18 @@ namespace calculator.Model
             Operation = string.Empty;
             IsOperationPending = false;
         }
+
+
+    }
+    public class Memory
+    {
+        public double Value { get; set; }
+        public string Operation { get; set; }
+
+        public Memory(double value, string operation)
+        {
+            Value = value;
+            Operation = operation;
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace calculator.View
         {
             InitializeComponent();
             DataContext = new CalculatorViewModel();
+            
         }
 
 

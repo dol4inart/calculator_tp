@@ -1,18 +1,23 @@
 ﻿using calculator.Command;
 using calculator.Model;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 
 namespace calculator.ViewModel
 {
     public class CalculatorViewModel : INotifyPropertyChanged
     {
+        private Memory _memory;
         private readonly CalculatorModel _calculatorModel;
         private string _currentInput;
+        private bool _isMemoryHistoryVisible;
+        private string _currentOperation;
 
         public string CurrentInput
         {
@@ -27,6 +32,34 @@ namespace calculator.ViewModel
             }
         }
 
+        public string CurrentOperation // Свойство для текущей операции
+        {
+            get => _currentOperation;
+            set
+            {
+                if (_currentOperation != value)
+                {
+                    _currentOperation = value;
+                    OnPropertyChanged();
+                }
+
+            }
+        }
+
+        public bool IsMemoryHistoryVisible
+        {
+            get => _isMemoryHistoryVisible;
+            set
+            {
+                if (_isMemoryHistoryVisible != value)
+                {
+                    _isMemoryHistoryVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         public ICommand NumberCommand { get; }
         public ICommand OperationCommand { get; }
         public ICommand FunctionCommand { get; }
@@ -35,12 +68,17 @@ namespace calculator.ViewModel
         public ICommand ClearEntryCommand { get; }
         public ICommand BackspaceCommand { get; }
         public ICommand InvertSignCommand { get; }
+
+
+
         public ICommand MemoryClearCommand { get; }
         public ICommand MemoryRecallCommand { get; }
-        public ICommand MemorySaveCommand { get; }
+        public ICommand MemoryStoreCommand { get; }
         public ICommand MemoryAddCommand { get; }
         public ICommand MemorySubtractCommand { get; }
-        public ICommand ShowMemoryHistoryCommand { get; }
+        public ICommand ToggleMemoryHistoryCommand { get; }
+
+        public ObservableCollection<Memory> MemoryHistory { get; }
 
 
 
@@ -55,13 +93,15 @@ namespace calculator.ViewModel
             _calculatorModel = new CalculatorModel();
             _currentInput = "0";
 
-            MemoryHistoryViewModel = new MemoryHistoryViewModel();
             MemoryClearCommand = new RelayCommand(OnMemoryClear);
             MemoryRecallCommand = new RelayCommand(OnMemoryRecall);
-            MemorySaveCommand = new RelayCommand(OnMemorySave);
+            MemoryStoreCommand = new RelayCommand(OnMemoryStore);
             MemoryAddCommand = new RelayCommand(OnMemoryAdd);
             MemorySubtractCommand = new RelayCommand(OnMemorySubtract);
-            ShowMemoryHistoryCommand = new RelayCommand(OnShowMemoryHistory);
+            ToggleMemoryHistoryCommand = new RelayCommand(OnToggleMemoryHistory);
+
+            MemoryHistory = new ObservableCollection<Memory>();
+            _memory = new Memory(0, ""); // Инициализация памяти
 
             NumberCommand = new RelayCommand(OnNumberButtonPressed);
             OperationCommand = new RelayCommand(OnOperationButtonPressed);
@@ -74,39 +114,44 @@ namespace calculator.ViewModel
         }
 
 
-        private void OnMemoryClear(object parameter)
+        private void OnMemoryClear(object parametr)
         {
-            MemoryValue = 0;
+            _memory.Value = 0;
+            _memory.Operation = "";
         }
 
-        private void OnMemoryRecall(object parameter)
+        private void OnMemoryStore(object parametr)
         {
-            CurrentInput = MemoryValue.ToString();
+            if (double.TryParse(CurrentInput, out double value)) // Проверяем, есть ли значение для сохранения
+            {
+                _memory.Value = value;
+                _memory.Operation = CurrentOperation; // Сохраняем текущее состояние операции
+                MemoryHistory.Add(new Memory(value, _memory.Operation)); // Сохраняем в историю
+            }
         }
 
-        private void OnMemorySave(object parameter)
+        private void OnMemoryRecall(object parametr)
         {
-            MemoryValue = double.Parse(CurrentInput);
-            MemoryHistoryViewModel.AddMemoryItem(MemoryValue, "Saved");
+            CurrentInput = _memory.Value.ToString();
+            // Здесь можно обновить состояние, если нужно
         }
 
-        private void OnMemoryAdd(object parameter)
+        private void OnMemoryAdd(object parametr)
         {
-            MemoryValue += double.Parse(CurrentInput);
-            MemoryHistoryViewModel.AddMemoryItem(MemoryValue, "Added");
+            if (double.TryParse(CurrentInput, out double value))
+            {
+                _memory.Value += value;
+                MemoryHistory.Add(new Memory(_memory.Value, "M+"));
+            }
         }
 
-        private void OnMemorySubtract(object parameter)
+        private void OnMemorySubtract(object parametr)
         {
-            MemoryValue -= double.Parse(CurrentInput);
-            MemoryHistoryViewModel.AddMemoryItem(MemoryValue, "Subtracted");
-        }
-
-        private void OnShowMemoryHistory(object parameter)
-        {
-            var memoryHistoryWindow = new MemoryHistoryWindow();
-            memoryHistoryWindow.DataContext = MemoryHistoryViewModel; // Передаем контекст
-            memoryHistoryWindow.ShowDialog();
+            if (double.TryParse(CurrentInput, out double value))
+            {
+                _memory.Value -= value;
+                MemoryHistory.Add(new Memory(_memory.Value, "M-"));
+            }
         }
 
         public void OnNumberButtonPressed(object parameter)
@@ -249,8 +294,12 @@ namespace calculator.ViewModel
             }
             else if (key == Key.Delete)
             {
-                OnClearButtonPressed(null);  
+                OnClearButtonPressed(null);
             }
+        }
+        private void OnToggleMemoryHistory(object parametr)
+        {
+            IsMemoryHistoryVisible = !IsMemoryHistoryVisible; // Переключаем видимость истории памяти
         }
 
 
