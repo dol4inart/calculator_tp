@@ -6,32 +6,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Controls;
-using System.Windows.Input;
+
 
 namespace calculator.ViewModel
-{
-
-    public abstract class Notifier : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (Equals(field, value))
-            {
-                return false;
-            }
-
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-    }
+{ 
 
 
     public class CalculatorViewModel : Notifier
@@ -42,7 +20,9 @@ namespace calculator.ViewModel
         private bool _isMemoryHistoryVisible;
         private bool _isNotDividingByZero;
         private bool _isMemoryNotEmpty;
+        private bool _actionButtonPressed;
         private int _equalCount;
+        
 
         // Свойства
         public string CurrentInput
@@ -63,14 +43,11 @@ namespace calculator.ViewModel
             set => SetProperty(ref _isNotDividingByZero, value);
         }
 
-        public int EqualCount
+        public bool ActionButtonPressed
         {
-            get => _equalCount;
-            set => SetProperty(ref _equalCount, value);
+            get => _actionButtonPressed;
+            set => SetProperty(ref _actionButtonPressed, value);
         }
-
-
-        public bool ActionButtonPressed = false;
 
         public bool IsMemoryNotEmpty
         {
@@ -78,6 +55,11 @@ namespace calculator.ViewModel
             set => SetProperty(ref _isMemoryNotEmpty, value);
         }
 
+        public int EqualCount
+        {
+            get => _equalCount;
+            set => SetProperty(ref _equalCount, value);
+        }
         public ObservableCollection<MemoryHistoryItem> MemoryHistory { get; }
 
         // Команды
@@ -101,9 +83,14 @@ namespace calculator.ViewModel
         public CalculatorViewModel()
         {
             _calculatorModel = new CalculatorModel();
-            _currentInput = "0";
-            EqualCount = 0;
+            CurrentInput = "0";
+            EqualCount = 0;     
             IsNotDividingByZero = true; // Нет деления на ноль изначально
+
+            
+
+            MemoryHistory = new ObservableCollection<MemoryHistoryItem>();
+            _memory = new MemoryHistoryItem(0, "");
 
             // Команды
             MemoryClearCommand = new RelayCommand(OnMemoryClear);
@@ -113,10 +100,6 @@ namespace calculator.ViewModel
             MemorySubtractCommand = new RelayCommand(OnMemorySubtract);
             CloseMemoryHistoryCommand = new RelayCommand(OnCloseMemoryHistory);
             ToggleMemoryHistoryCommand = new RelayCommand(OnToggleMemoryHistory);
-
-            MemoryHistory = new ObservableCollection<MemoryHistoryItem>();
-            _memory = new MemoryHistoryItem(0, "");
-
             NumberCommand = new RelayCommand(OnNumberButtonPressed);
             OperationCommand = new RelayCommand(OnOperationButtonPressed);
             FunctionCommand = new RelayCommand(OnFunctionButtonPressed);
@@ -229,9 +212,7 @@ namespace calculator.ViewModel
                 var function = parameter.ToString();
                 if (function == "1/x" && double.Parse(CurrentInput) == 0)
                 {
-                    CurrentInput = "Деление на ноль невозможно";
-                    _calculatorModel.IsOperationPending = false;
-                    IsNotDividingByZero = false;
+                    ThrowExceptonDivideByZero();
                 }
 
                 else if (_calculatorModel.IsOperationPending && function != "%")
@@ -256,9 +237,7 @@ namespace calculator.ViewModel
         {
             if (_calculatorModel.Operation == "/" && double.Parse(CurrentInput) == 0)
             {
-                CurrentInput = "Деление на ноль невозможно";
-                _calculatorModel.IsOperationPending = false;
-                IsNotDividingByZero = false;
+                ThrowExceptonDivideByZero();
             }
             else
             {
@@ -368,6 +347,13 @@ namespace calculator.ViewModel
         private void OnToggleMemoryHistory(object parameter)
         {
             IsMemoryHistoryVisible = !IsMemoryHistoryVisible;
+        }
+
+        private void ThrowExceptonDivideByZero()
+        {
+            CurrentInput = "Деление на ноль невозможно";
+            _calculatorModel.IsOperationPending = false;
+            IsNotDividingByZero = false;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Windows.Input;
 
 namespace calculator.Command
 {
+    // Класс отвечает за выполнение команд, что соответствует принципу SRP
     public class RelayCommand : ICommand
     {
         private readonly Action<object> _execute;
