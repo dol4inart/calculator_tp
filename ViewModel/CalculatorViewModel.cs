@@ -195,54 +195,59 @@ namespace calculator.ViewModel
             }
             else
             {
-                CurrentInput += number; 
+                CurrentInput += number;
             }
         }
 
         // Обработка операций
         public void OnOperationButtonPressed(object parameter)
         {
-            
-            if (_calculatorModel.IsOperationPending)
+            if (IsNotDividingByZero == true)
+            {
+                if (_calculatorModel.IsOperationPending)
                 {
                     _calculatorModel.CurrentValue = double.Parse(CurrentInput);
                     _calculatorModel.ExecuteOperation();
                     CurrentInput = _calculatorModel.CurrentValue.ToString();
                 }
 
+
                 _calculatorModel.PreviousValue = double.Parse(CurrentInput);
                 _calculatorModel.Operation = parameter.ToString();
                 _calculatorModel.IsOperationPending = true;
                 ActionButtonPressed = true;
             }
+        }
 
-           
+
 
         // Обработка функций (например, %)
         public void OnFunctionButtonPressed(object parameter)
         {
+            if (IsNotDividingByZero == true)
+            {
+                var function = parameter.ToString();
+                if (function == "1/x" && double.Parse(CurrentInput) == 0)
+                {
+                    CurrentInput = "Деление на ноль невозможно";
+                    _calculatorModel.IsOperationPending = false;
+                    IsNotDividingByZero = false;
+                }
 
-            var function = parameter.ToString();
-            if (function == "1/x" && double.Parse(CurrentInput) == 0)
-            { 
-                CurrentInput = "Деление на ноль невозможно";
-                _calculatorModel.IsOperationPending = false;
-                IsNotDividingByZero = false;
-            }
-                
-            else if (_calculatorModel.IsOperationPending && function != "%")
-            {
-                
-                _calculatorModel.CurrentValue = double.Parse(CurrentInput);
-                _calculatorModel.ExecuteOperation();
-                CurrentInput = _calculatorModel.CurrentValue.ToString();
-                _calculatorModel.IsOperationPending = false;
-            }
-            else
-            {
-                _calculatorModel.CurrentValue = double.Parse(CurrentInput);
-                _calculatorModel.ExecuteFunction(function);
-                CurrentInput = _calculatorModel.CurrentValue.ToString();
+                else if (_calculatorModel.IsOperationPending && function != "%")
+                {
+
+                    _calculatorModel.CurrentValue = double.Parse(CurrentInput);
+                    _calculatorModel.ExecuteOperation();
+                    CurrentInput = _calculatorModel.CurrentValue.ToString();
+                    _calculatorModel.IsOperationPending = false;
+                }
+                else
+                {
+                    _calculatorModel.CurrentValue = double.Parse(CurrentInput);
+                    _calculatorModel.ExecuteFunction(function);
+                    CurrentInput = _calculatorModel.CurrentValue.ToString();
+                }
             }
         }
 
@@ -273,8 +278,8 @@ namespace calculator.ViewModel
                     CurrentInput = _calculatorModel.CurrentValue.ToString();
                     _calculatorModel.IsOperationPending = false;
                 }
-               
-                
+
+
             }
             EqualCount++;
         }
