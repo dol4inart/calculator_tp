@@ -11,6 +11,12 @@
                 <Setter Property="Background" Value="#f9f9f9"/>
                 <Setter Property="Foreground" Value="#5f5f5f"/>
             </Trigger>
+
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                    <Setter Property="Background" Value="Gray"/>
+                </Trigger>
+            
         </Style.Triggers>
         <Setter Property="Background" Value="#fcfcfc"/>
         <Setter Property="Foreground" Value="#1b1b1b"/>

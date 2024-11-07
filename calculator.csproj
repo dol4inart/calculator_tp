@@ -120,7 +120,6 @@
     <Compile Include="Model\MemoryHistoryItem.cs" />
     <Compile Include="Resources\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\CalculatorViewModel.cs" />
-    <Compile Include="ViewModel\MemoryHistoryViewModel.cs" />
     <Compile Include="View\MemoryHistoryWindow.xaml.cs">
       <DependentUpon>MemoryHistoryWindow.xaml</DependentUpon>
     </Compile>

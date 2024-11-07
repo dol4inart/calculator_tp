@@ -30,16 +30,16 @@ namespace calculator.Model
                     CurrentValue = PreviousValue * CurrentValue;
                     break;
                 case "/":
-                    /*try 
-                    {*/
-                        if (CurrentValue != 0)
-                            CurrentValue = PreviousValue / CurrentValue;
+                    try
+                    {
+                        if (CurrentValue == 0)
+                            ThrowException("Cannot divide by zero", CurrentValue, Operation);
                         else
-                        {
-                            throw new CurrentValueIsZeroException("Cannot divide by zero", PreviousValue);
-                        }
-                    /*}*/
-                    
+                            CurrentValue = 1 / CurrentValue;
+
+                    }
+                    catch { }
+
 
                     break;
             }
@@ -54,15 +54,12 @@ namespace calculator.Model
                     {
                         if (CurrentValue < 0)
                         {
-                            throw new NegativeSqrtException("NegativeSqrtException", CurrentValue);
+                            ThrowException("NegativeSqrtException", CurrentValue, function);
                         }
                         CurrentValue = Math.Sqrt(CurrentValue);
                     }
-                    catch (NegativeSqrtException)
-                    {
-                        MessageBox.Show("Взять квадратный корень из отрицательного числа нельзя.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Clear();
-                    }
+                    catch
+                    { }
 
                     break;
                 case "x^2":
@@ -72,16 +69,13 @@ namespace calculator.Model
                     try 
                     {
                         if (CurrentValue == 0)
-                            throw new CurrentValueIsZeroException("Cannot divide by zero", CurrentValue);
+                            ThrowException("Cannot divide by zero", CurrentValue, function);
                         else
                             CurrentValue = 1 / CurrentValue;
 
                     }
-                    catch (CurrentValueIsZeroException)
-                    {
-                        MessageBox.Show("Деление на ноль невозможно.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Clear();
-                    }
+                    catch { }
+
                     break;
 
                 case "%":
@@ -98,6 +92,18 @@ namespace calculator.Model
             IsOperationPending = false;
         }
 
+        private void ThrowException(string message, double CurrentValue, string function)
+        {
+            if (function == "1/x" || function == "/")
+            {
+                throw new CurrentValueIsZeroException(message, CurrentValue);
+            }
+            else if (function == "sqrt")
+            {
+                throw new NegativeSqrtException(message, CurrentValue);
+            }
+
+        }
 
     }
 }
