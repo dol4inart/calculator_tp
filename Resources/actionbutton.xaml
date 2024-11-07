@@ -41,7 +41,13 @@
                 <Setter Property="Background" Value="DarkSeaGreen"/>
                 <Setter Property="Foreground" Value="LightCyan"/>
             </Trigger>
+
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5"/>
+                <Setter Property="Foreground" Value="Gray"/>
+            </Trigger>
         </Style.Triggers>
+
         <Setter Property="Background" Value="MediumSeaGreen"/>
         <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>

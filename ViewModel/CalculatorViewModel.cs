@@ -8,12 +8,36 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using System.Configuration;
 
 namespace calculator.ViewModel
 {
-    public class CalculatorViewModel : INotifyPropertyChanged
+    public abstract class Notifier : INotifyPropertyChanged
     {
-        private Memory _memory;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(field, value))
+            {
+                return false;
+            }
+
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+    }
+
+
+    public class CalculatorViewModel : Notifier
+    {
+        private MemoryHistoryItem _memory;
         private readonly CalculatorModel _calculatorModel;
         private string _currentInput;
         private bool _isMemoryHistoryVisible;
@@ -22,41 +46,20 @@ namespace calculator.ViewModel
         public string CurrentInput
         {
             get => _currentInput;
-            set
-            {
-                if (_currentInput != value)
-                {
-                    _currentInput = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref _currentInput, value);
         }
 
         public string CurrentOperation // Свойство для текущей операции
         {
             get => _currentOperation;
-            set
-            {
-                if (_currentOperation != value)
-                {
-                    _currentOperation = value;
-                    OnPropertyChanged();
-                }
+            set => SetProperty(ref _currentInput, value);
 
-            }
         }
 
         public bool IsMemoryHistoryVisible
         {
             get => _isMemoryHistoryVisible;
-            set
-            {
-                if (_isMemoryHistoryVisible != value)
-                {
-                    _isMemoryHistoryVisible = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref _isMemoryHistoryVisible, value);
         }
 
 
@@ -77,14 +80,17 @@ namespace calculator.ViewModel
         public ICommand MemoryAddCommand { get; }
         public ICommand MemorySubtractCommand { get; }
         public ICommand ToggleMemoryHistoryCommand { get; }
+        public ICommand CloseMemoryHistoryCommand { get; }
 
-        public ObservableCollection<Memory> MemoryHistory { get; }
+        public ObservableCollection<MemoryHistoryItem> MemoryHistory { get; }
 
-
+        public MemoryHistoryViewModel MemoryHistoryViewModel { get; }
 
 
         public double MemoryValue { get; private set; }
-        public MemoryHistoryViewModel MemoryHistoryViewModel { get; }
+        
+
+        public bool IsMemoryNotEmpty => MemoryHistory.Count > 0;
 
 
         public CalculatorViewModel()
@@ -98,10 +104,13 @@ namespace calculator.ViewModel
             MemoryStoreCommand = new RelayCommand(OnMemoryStore);
             MemoryAddCommand = new RelayCommand(OnMemoryAdd);
             MemorySubtractCommand = new RelayCommand(OnMemorySubtract);
+            CloseMemoryHistoryCommand = new RelayCommand(OnCloseMemoryHistory);
             ToggleMemoryHistoryCommand = new RelayCommand(OnToggleMemoryHistory);
 
-            MemoryHistory = new ObservableCollection<Memory>();
-            _memory = new Memory(0, ""); // Инициализация памяти
+            MemoryHistory = new ObservableCollection<MemoryHistoryItem>();
+            _memory = new MemoryHistoryItem(0, "");
+            _currentOperation = "";
+            //IsMemoryHistoryVisible = false;
 
             NumberCommand = new RelayCommand(OnNumberButtonPressed);
             OperationCommand = new RelayCommand(OnOperationButtonPressed);
@@ -114,43 +123,46 @@ namespace calculator.ViewModel
         }
 
 
-        private void OnMemoryClear(object parametr)
+        private void OnMemoryClear(object parameter)
         {
-            _memory.Value = 0;
-            _memory.Operation = "";
+            MemoryHistory.Clear();
+            CurrentOperation = "";
         }
 
-        private void OnMemoryStore(object parametr)
+        private void OnMemoryStore(object parameter)
         {
             if (double.TryParse(CurrentInput, out double value)) // Проверяем, есть ли значение для сохранения
             {
                 _memory.Value = value;
                 _memory.Operation = CurrentOperation; // Сохраняем текущее состояние операции
-                MemoryHistory.Add(new Memory(value, _memory.Operation)); // Сохраняем в историю
+                MemoryHistory.Add(new MemoryHistoryItem(value, _memory.Operation)); // Сохраняем в историю
             }
         }
 
-        private void OnMemoryRecall(object parametr)
+        private void OnMemoryRecall(object parameter)
         {
-            CurrentInput = _memory.Value.ToString();
-            // Здесь можно обновить состояние, если нужно
+            if (MemoryHistory.Count > 0)
+            {
+                var lastMemory = MemoryHistory[MemoryHistory.Count - 1];
+                CurrentInput = lastMemory.Value.ToString();
+            }
         }
 
-        private void OnMemoryAdd(object parametr)
+        private void OnMemoryAdd(object parameter)
         {
             if (double.TryParse(CurrentInput, out double value))
             {
                 _memory.Value += value;
-                MemoryHistory.Add(new Memory(_memory.Value, "M+"));
+                MemoryHistory.Add(new MemoryHistoryItem(_memory.Value, "M+"));
             }
         }
 
-        private void OnMemorySubtract(object parametr)
+        private void OnMemorySubtract(object parameter)
         {
             if (double.TryParse(CurrentInput, out double value))
             {
                 _memory.Value -= value;
-                MemoryHistory.Add(new Memory(_memory.Value, "M-"));
+                MemoryHistory.Add(new MemoryHistoryItem(_memory.Value, "M-"));
             }
         }
 
@@ -297,17 +309,16 @@ namespace calculator.ViewModel
                 OnClearButtonPressed(null);
             }
         }
-        private void OnToggleMemoryHistory(object parametr)
+        private void OnCloseMemoryHistory(object parameter)
         {
-            IsMemoryHistoryVisible = !IsMemoryHistoryVisible; // Переключаем видимость истории памяти
+            IsMemoryHistoryVisible = false;
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnToggleMemoryHistory(object parameter)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            IsMemoryHistoryVisible = !IsMemoryHistoryVisible;
         }
+
 
         internal void ProcessKeyPress(Key key, TextBox inputTextBox)
         {

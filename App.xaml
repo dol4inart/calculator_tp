@@ -4,19 +4,20 @@
              xmlns:local="clr-namespace:calculator"
              StartupUri="/View/MainWindow.xaml">
     <Application.Resources>
+
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="/Resources/Button.xaml"/>
+                <ResourceDictionary Source="/Resources/ActionButton.xaml"/>
+                <ResourceDictionary Source="/Resources/menu.xaml"/>
+                <ResourceDictionary Source="/Resources/number.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
         
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
-                    <ResourceDictionary Source="/Resources/Button.xaml"/>
-                    <ResourceDictionary Source="/Resources/ActionButton.xaml"/>
-                    <ResourceDictionary Source="/Resources/menu.xaml"/>
-                    <ResourceDictionary Source="/Resources/number.xaml"/>
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-       
-       
-       
-    </Application.Resources>
+
+
+        </Application.Resources>
 </Application>

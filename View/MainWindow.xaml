@@ -6,16 +6,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
         xmlns:vm="clr-namespace:calculator.ViewModel"
-        xmlns:local="clr-namespace:calculator.Converters"
         Icon="/icon/calculator.png"
         mc:Ignorable="d"
-        Title="Калькулятор" MinHeight="515" MinWidth="335" Height="700" Width="455" WindowStartupLocation="CenterScreen" MaxHeight="770" MaxWidth="500.5"
+        Title="Калькулятор" MinHeight="515" MinWidth="335" Height="700" Width="455" WindowStartupLocation="CenterScreen" 
         PreviewKeyDown="Window_PreviewKeyDown">
     <!--UniformGrid-->
     <!--xmlns:local="clr-namespace:calculator.View"-->
-    <Window.Resources>
-        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </Window.Resources>
 
     <Grid Background="#f3f3f3" Margin="4">
         <Grid.ColumnDefinitions>
@@ -27,6 +23,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="2*"/>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -60,69 +57,69 @@
         </Button>-->
 
 
-        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="%">
+        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="%">
             <materialDesign:PackIcon Kind="Percent" />
         </Button>
 
-        <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource ActionButton}" Command="{Binding ClearCommand}">
+        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource ActionButton}" Command="{Binding ClearCommand}">
             <materialDesign:PackIcon Kind="Eraser" />
         </Button>
 
-        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ActionButton}" Command="{Binding ClearEntryCommand}">C</Button>
+        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ActionButton}" Command="{Binding ClearEntryCommand}">C</Button>
 
-        <Button Grid.Row="2" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding BackspaceCommand}">
+        <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding BackspaceCommand}">
             <materialDesign:PackIcon Kind="Backspace" />
         </Button>
 
 
 
-        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="1/x">1/x</Button>
+        <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="1/x">1/x</Button>
 
-        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="x^2">
+        <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="x^2">
             <materialDesign:PackIcon Kind="FormatSuperscript" />
         </Button>
 
-        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="sqrt">
+        <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ActionButton}" Command="{Binding FunctionCommand}" CommandParameter="sqrt">
             <materialDesign:PackIcon Kind="SquareRoot" />
         </Button>
 
-        <Button Grid.Row="3" Grid.Column="3"  Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="/">
+        <Button Grid.Row="4" Grid.Column="3"  Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="/">
             <materialDesign:PackIcon Kind="Division" />
         </Button>
 
 
 
-        <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="7">7</Button>
-        <Button Grid.Row="4" Grid.Column="1"  Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="8">8</Button>
-        <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="9">9</Button>
-        <Button Grid.Row="4" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="*">
+        <Button Grid.Row="5" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="7">7</Button>
+        <Button Grid.Row="5" Grid.Column="1"  Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="8">8</Button>
+        <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="9">9</Button>
+        <Button Grid.Row="5" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="*">
             <materialDesign:PackIcon Kind="Close" />
         </Button>
 
 
 
-        <Button Grid.Row="5" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="4">4</Button>
-        <Button Grid.Row="5" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="5">5</Button>
-        <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="6">6</Button>
-        <Button Grid.Row="5" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="-">
+        <Button Grid.Row="6" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="4">4</Button>
+        <Button Grid.Row="6" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="5">5</Button>
+        <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="6">6</Button>
+        <Button Grid.Row="6" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="-">
             <materialDesign:PackIcon Kind="Minus" />
         </Button>
 
 
-        <Button Grid.Row="6" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="1">1</Button>
-        <Button Grid.Row="6" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="2">2</Button>
-        <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="3">3</Button>
-        <Button Grid.Row="6" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="+">
+        <Button Grid.Row="7" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="1">1</Button>
+        <Button Grid.Row="7" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="2">2</Button>
+        <Button Grid.Row="7" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="3">3</Button>
+        <Button Grid.Row="7" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding OperationCommand}" CommandParameter="+">
             <materialDesign:PackIcon Kind="Plus" />
         </Button>
 
 
-        <Button Grid.Row="7" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding InvertSignCommand}">
+        <Button Grid.Row="8" Grid.Column="0" Style="{StaticResource Button}" Command="{Binding InvertSignCommand}">
             <materialDesign:PackIcon Kind="PlusMinusVariant" />
         </Button>
-        <Button Grid.Row="7" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="0">0</Button>
-        <Button Grid.Row="7" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter=",">,</Button>
-        <Button Grid.Row="7" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding EqualsCommand}" Cursor="">
+        <Button Grid.Row="8" Grid.Column="1" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter="0">0</Button>
+        <Button Grid.Row="8" Grid.Column="2" Style="{StaticResource Button}" Command="{Binding NumberCommand}" CommandParameter=",">,</Button>
+        <Button Grid.Row="8" Grid.Column="3" Style="{StaticResource ActionButton}" Command="{Binding EqualsCommand}" Cursor="">
             <materialDesign:PackIcon Kind="Equal" />
         </Button>
 
@@ -152,23 +149,24 @@
                  VerticalAlignment="Center" Width="auto" MinWidth="35" MinHeight="100" FontSize="30"
                  Grid.Column="0" Grid.ColumnSpan="4" TextAlignment="Right" MaxLength="16" 
                  Style="{StaticResource Number}" IsReadOnly="False"/>
-        <UniformGrid Rows="1" Columns="5">
-            <Button Command="{Binding MemoryClearCommand}" Content="MC" Style="{StaticResource ActionButton}"/>
-            <Button Command="{Binding MemoryRecallCommand}" Content="MR" Style="{StaticResource ActionButton}"/>
+        <UniformGrid Rows="1" Columns="6" Grid.Row="2" Grid.ColumnSpan="6">
+            <Button Command="{Binding MemoryClearCommand}" Content="MC" Style="{StaticResource ActionButton}" IsEnabled="{Binding IsMemoryNotEmpty}"/>
+            <Button Command="{Binding MemoryRecallCommand}" Content="MR" Style="{StaticResource ActionButton}" IsEnabled="{Binding IsMemoryNotEmpty}"/>
             <Button Command="{Binding MemoryStoreCommand}" Content="MS" Style="{StaticResource ActionButton}"/>
             <Button Command="{Binding MemoryAddCommand}" Content="M+" Style="{StaticResource ActionButton}"/>
             <Button Command="{Binding MemorySubtractCommand}" Content="M-" Style="{StaticResource ActionButton}"/>
-            <Button Command="{Binding ToggleMemoryHistoryCommand}" Content="M▼" Style="{StaticResource ActionButton}"/>
+            <Button Command="{Binding ToggleMemoryHistoryCommand}" Content="M▼" Style="{StaticResource ActionButton}" />
         </UniformGrid>
 
+        <Border x:Name="DimmedBackground" Background="Black" Opacity="0.5" Visibility="{Binding IsMemoryHistoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="0" Grid.RowSpan="9" Grid.ColumnSpan="4"/>
+
         <ListBox x:Name="MemoryHistoryListBox" 
-         Grid.Row="0" 
-         Grid.RowSpan="8" 
-         Grid.ColumnSpan="4" 
-         Margin="0,5"
-         ItemsSource="{Binding MemoryHistory}" 
-         Background="White" 
-         Visibility="{Binding IsMemoryHistoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                 Grid.Row="4" 
+                 Grid.RowSpan="5" 
+                 Grid.ColumnSpan="4" 
+                 ItemsSource="{Binding MemoryHistory}" 
+                 Background="White" 
+                 Visibility="{Binding IsMemoryHistoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -177,6 +175,23 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="White">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Button Command="{Binding CloseMemoryHistoryCommand}" Style="{StaticResource Button}" 
+                                    HorizontalAlignment="Right" Margin="5">
+                                <materialDesign:PackIcon Kind="Close" />
+                            </Button>
+                            <ItemsPresenter Grid.Row="1"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </ListBox.Template>
         </ListBox>
     </Grid>
 
